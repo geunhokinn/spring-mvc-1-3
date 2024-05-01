@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,9 +37,46 @@ public class BasicItemController {
         return "basic/addForm";
     }
 
+//    @PostMapping("/add")
+    public String addItemV1(@RequestParam String itemName,
+                       @RequestParam int price,
+                       @RequestParam Integer quantity,
+                       Model model) {
+
+        Item item = new Item();
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setQuantity(quantity);
+
+        itemRepository.save(item);
+
+        model.addAttribute("item", item);
+
+        return "basic/item";
+    }
+
+//    @PostMapping("/add")
+    public String addItemV2(@ModelAttribute("item") Item item, Model model) {
+
+        itemRepository.save(item);
+//        model.addAttribute("item", item);
+        return "basic/item";
+    }
+
+//    @PostMapping("/add")
+    public String addItemV3(@ModelAttribute Item item) {
+
+        // model 이름 생략 가능, 클래스명 첫 글자를 소문자로 Item -> item
+        itemRepository.save(item);
+        return "basic/item";
+    }
+
     @PostMapping("/add")
-    public String save() {
-        return "basic/addForm";
+    public String addItemV4(Item item) {
+        // 우리가 만든 자체 클래스일 경우 생략 가능
+        // 생략했기 때문에 V3와 마찬가지로 item 모델에 자동 등록 된다.
+        itemRepository.save(item);
+        return "basic/item";
     }
 
     /**
