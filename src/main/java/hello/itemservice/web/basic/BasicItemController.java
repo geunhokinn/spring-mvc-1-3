@@ -71,12 +71,18 @@ public class BasicItemController {
         return "basic/item";
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item) {
         // 우리가 만든 자체 클래스일 경우 생략 가능
         // 생략했기 때문에 V3와 마찬가지로 item 모델에 자동 등록 된다.
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    @PostMapping("/add")
+    public String addItemV5(Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
     }
 
     @GetMapping("/{itemId}/edit")
